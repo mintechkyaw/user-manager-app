@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(15);
+        $users = User::simplePaginate(7);
         return UserResource::collection($users);
     }
 
@@ -38,7 +38,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    
+
     public function show($user)
     {
         if ($user = User::find($user)) {
@@ -66,10 +66,10 @@ class UserController extends Controller
     {
         if ($user = User::find($user)) {
             if ($user->id == Auth::id()) {
-                return response()->json(["messsage'=> 'You're deleting yourself "]);
+                return response()->json(["message'=> 'You're deleting yourself "],401);
             } else {
                 $user->delete();
-                return  response()->json(['message' => 'User Deleted.'], 202);
+                return response()->json(['message' => 'User Deleted.'], 202);
             }
         }
         return response()->json([

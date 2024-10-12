@@ -17,10 +17,10 @@ class RegisterController extends Controller
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
+        // $user->assignRole('user');
         $token = $user->createToken('Personal Access Token')->accessToken;
         return response()->json([
-            'message' => 'User registered successfully',
-            'user' => $user,
+            'msg' => 'User registered successfully',
             'token' => $token,
         ], 201);
     }

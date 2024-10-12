@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @vite('resources/css/app.css')
     <title>User-Manager-App</title>
-
 </head>
 
-<body>
+<body class="bg-white dark:bg-gray-900">
     <div id="app"></div>
     @vite('resources/js/app.js')
 </body>

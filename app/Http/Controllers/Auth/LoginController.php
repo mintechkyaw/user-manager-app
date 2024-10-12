@@ -20,11 +20,11 @@ class LoginController extends Controller
             $user = Auth::user();
             $token = $user->createToken('Personal Access Token')->accessToken;
             return response()->json([
-                'user' => new UserResource($user),
+                'msg' => "user crendential correct!",
                 'token' => $token
             ]);
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'Unauthorized', "message" => "Invalid email or password."], 401);
         }
     }
 }
