@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Route;
 Route::view('/login', 'layouts.app')->name('login');
 Route::view('/register', 'layouts.app')->name('register');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 Route::any('/{any}', function () {
     return view('layouts.app');
 })->where('any','.*');
