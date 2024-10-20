@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $adminUser->assignRole('admin');
-        $editorUser->assignRole('editor');
+        $editorUser->assignRole(roles: 'editor');
         User::factory(10)->create();
 
     }

@@ -1,6 +1,6 @@
-import './bootstrap';
+import './utils/bootstrap';
 import { createApp } from 'vue';
-import router from './routes';
+import router from './router';
 import { createPinia } from 'pinia'
 import 'flowbite'
 

@@ -21,9 +21,9 @@
                 <p class="mt-2 text-sm text-red-600 dark:text-red-500"> {{ error }}</p>
             </div>
             <div class="mb-5 flex justify-between items-center">
-                <button type="submit" @click="login"
+                <button type="submit" @click="login(form)"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
-                <a href="/register" class="text-gray-900 dark:text-white hover:underline">Create New Account</a>
+                <RouterLink :to="{name:'register'}" class="text-gray-900 dark:text-white hover:underline">Create New Account</RouterLink>
             </div>
         </form>
     </GuestLayout>
@@ -32,26 +32,11 @@
 <script setup>
 import { ref } from 'vue';
 import GuestLayout from '../Layouts/GuestLayout.vue';
-import router from '../routes';
+import { login } from '../utils/auth';
+import { RouterLink } from 'vue-router';
 const error = ref(null);
 const form = {
     email: 'minthantk642@gmail.com',
     password: 'asdf1234..'
 }
-
-const login = async () => {
-    try {
-        const response = await axios.post('api/login', form); 
-        localStorage.setItem('token', response.data.token);
-        router.go('/home'); 
-    } catch (err) {
-        if (err) {
-            console.error(err.response.data.error);
-            error.value = err.response.data.message
-        } else {
-            console.error('An unknown error occurred');
-        }
-    }
-};
-
 </script>

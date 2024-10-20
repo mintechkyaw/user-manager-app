@@ -1,22 +1,16 @@
 <script setup lang="ts">
 import axios from 'axios';
 import AppLayout from '../Layouts/AppLayout.vue';
-import router from '../routes';
+import router from '../router';
 import { useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
-const logout = async () => {
-    axios.post('api/logout');
-    localStorage.removeItem('token');
-    router.push('/login')
-}
+import { logout } from '../utils/auth';
+
 
 const auth = useUserStore()
 const { name, email, role } = storeToRefs(auth)
 
-onMounted(() => {
-    auth.getUserInfo();
-})
 </script>
 
 <template>
@@ -38,7 +32,7 @@ onMounted(() => {
                         <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ email }}
                         </dd>
                     </div>
-                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0" v-if="role === 'admin'">
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0" v-if="role !== 'user'">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Role</dt>
                         <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ role }}</dd>
                     </div>

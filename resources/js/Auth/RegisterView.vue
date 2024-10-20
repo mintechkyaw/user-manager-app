@@ -32,36 +32,24 @@
                     required />
             </div>
             <div class="mb-5 flex justify-between items-center">
-                <button type="submit" @click="register"
+                <button type="submit" @click="register(form)"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Register</button>
 
-                <a href="/login" class="text-gray-900 dark:text-white hover:underline">Already Have An Account</a>
+                <RouterLink :to="{ name: 'login' }" class="text-gray-900 dark:text-white hover:underline">
+                    Already Have An Account</RouterLink>
             </div>
         </form>
     </GuestLayout>
 </template>
 
 <script setup>
-
-import axios from 'axios';
-import router from '../routes';
+import { RouterLink } from 'vue-router';
 import GuestLayout from '../Layouts/GuestLayout.vue';
-
+import { register } from '../utils/auth';
 const form = {
     name: '',
     email: '',
     password: '',
     pasword_confirmation: ''
 }
-
-const register = async () => {
-    try {
-        const response = await axios.post('api/register', form);
-        localStorage.setItem('token', response.data.token);
-        router.go('/home');
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 </script>

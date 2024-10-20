@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -16,8 +15,8 @@ class LoginController extends Controller
     {
         $data = $request->validated();
 
-        if (Auth::attempt($data)) {
-            $user = Auth::user();
+        if (auth()->guard('web')->attempt($data)) {
+            $user = Auth::guard('web')->user();
             $token = $user->createToken('Personal Access Token')->accessToken;
             return response()->json([
                 'msg' => "user crendential correct!",

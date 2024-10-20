@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\PermissionController;
+use App\Http\Controllers\Api\Admin\RoleController;
+use App\Http\Controllers\Api\Admin\RolePermissionController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController;
@@ -13,7 +17,8 @@ Route::post('/login', LoginController::class);
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/user', function (Request $request) {
-        return $request->user()->load('roles');
+        $user = new UserResource($request->user()->load('roles'));
+        return response()->json($user, 200);
     });
     Route::apiResource('/posts', PostController::class)->only(['index', 'show']);
     Route::post('/logout', LogoutController::class);
@@ -22,9 +27,15 @@ Route::middleware(['auth:api'])->group(function () {
 Route::prefix('/admin')->middleware(['auth:api', 'role:admin'])->group(function () {
     Route::apiResource('/posts', PostController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('/users', UserController::class);
+    Route::apiResource('/posts', PostController::class);
+    Route::apiResource('/roles', RoleController::class);
+    Route::apiResource('/permissions', PermissionController::class);
+
+    Route::put('/role-permission/{role}', [RolePermissionController::class, 'roleAddPermission']);
+    Route::delete('/role-permission/{role}', [RolePermissionController::class, 'roleMinusPermission']);
+
 });
 
-Route::prefix('/editor')->middleware(['auth:api', 'role:editor',''])->group(function () {
-    Route::apiResource('users', UserController::class)->except(['store', 'destroy']);
+Route::prefix('/editor')->middleware(['auth:api', 'role:editor', ''])->group(function () {
     Route::apiResource('/users', UserController::class)->except(['store', 'destroy']);
 });
