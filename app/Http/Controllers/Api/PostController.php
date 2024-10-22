@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
-use Illuminate\Auth\Events\Validated;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -16,8 +14,16 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->get();
-        return PostResource::collection($posts);
+        if (auth()->user()->hasPermissionTo('read-post')) {
+            $posts = Post::latest()->get();
+
+            return PostResource::collection($posts);
+        }
+
+        return response()->json([
+            'error' => 'Unauthorized',
+            'message' => 'Nah! You can\'t see the posts',
+        ], 403);
     }
 
     /**
@@ -25,11 +31,19 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $data = $request->validated();
-        Post::create($data);
+        if (auth()->user()->hasPermissionTo('create-post')) {
+            $data = $request->validated();
+            Post::create($data);
+
+            return response()->json([
+                'msg' => 'Post Uploaded Successfully',
+            ]);
+        }
+
         return response()->json([
-            'msg' => "Post Uploaded Successfully"
-        ]);
+            'error' => 'Unauthorized',
+            'msg' => 'Nah You can\'t upload post',
+        ], 403);
     }
 
     /**
@@ -37,12 +51,15 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        if ($user = Post::find($post)) {
+        if (auth()->user()->hasPermissionTo('read-post')) {
             return new PostResource($post);
         }
+
         return response()->json([
-            'msg' => 'Post not found!'
-        ]);
+            'error' => 'Unauthorized',
+            'msg' => 'Nah You can\'t see the posts',
+        ], 403);
+
     }
 
     /**
@@ -50,11 +67,19 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
-        $data = $request->validated();
-        $post->update($data);
+        if (auth()->user()->hasPermissionTo('update-post')) {
+            $data = $request->validated();
+            $post->update($data);
+
+            return response()->json([
+                'msg' => 'Post Updated',
+            ], 200);
+        }
+
         return response()->json([
-            'msg' => 'Post Updated'
-        ], 200);
+            'error' => 'Unauthorized',
+            'msg' => 'Nah You can\'t edit the post',
+        ], 403);
 
     }
 
@@ -63,9 +88,18 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        if (auth()->user()->hasPermissionTo('delete-post')) {
+            $post->delete();
+
+            return response()->json([
+                'msg' => 'Post Deleted',
+            ], 200);
+        }
+
         return response()->json([
-            'msg' => 'Post Deleted'
-        ], 200);
+            'error' => 'Unauthorized',
+            'msg' => 'Nah You can\'t delete the post',
+        ], 403);
+
     }
 }

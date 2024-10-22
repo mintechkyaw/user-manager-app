@@ -16,6 +16,8 @@ class PostResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
+
             'title' => $this->title,
             'content' => $this->content,
             'published_at' => Carbon::parse($this->created_at)->toDateTimeString(),

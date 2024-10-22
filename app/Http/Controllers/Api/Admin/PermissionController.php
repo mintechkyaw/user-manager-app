@@ -15,6 +15,7 @@ class PermissionController extends Controller
     public function index()
     {
         $permissions = Permission::all();
+
         return PermissionResource::collection($permissions);
     }
 
@@ -28,7 +29,7 @@ class PermissionController extends Controller
         Permission::create($data);
 
         return response()->json([
-            'msg' => 'Permission Created'
+            'msg' => 'Permission Created',
         ], 200);
     }
 
@@ -47,8 +48,9 @@ class PermissionController extends Controller
     {
         $data = $request->validated();
         $permission->update($data);
+
         return response()->json([
-            'msg' => 'Permission Updated'
+            'msg' => 'Permission Updated',
         ], 200);
     }
 
@@ -58,8 +60,9 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         $permission->delete();
+
         return response()->json([
-            'msg' => 'Permission Deleted'
+            'msg' => 'Permission Deleted',
         ], 200);
     }
 }

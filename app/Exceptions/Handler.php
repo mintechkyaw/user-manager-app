@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -41,8 +42,20 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'error' => 'Requested Resource Not Found',
+                ], 404);
+            }
+        });
+
+        $this->renderable(function (UnauthorizedException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'error' => 'You don\'t have Permission to Access this. Contact your Boss!',
+                ], 403);
+            }
         });
     }
 }

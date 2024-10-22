@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['name', 'guard_name']);
-        }); 
+        });
 
         Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames) {
             //$table->engine('InnoDB');

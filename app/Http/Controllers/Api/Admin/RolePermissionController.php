@@ -8,22 +8,23 @@ use Spatie\Permission\Models\Role;
 
 class RolePermissionController extends Controller
 {
-    public function roleAddPermission(Role $role,RolePermissionRequest $request) {
+    public function roleAddPermission(Role $role, RolePermissionRequest $request)
+    {
         $data = $request->validated();
-
-        
 
         return [
             'role' => $role,
-            'permission' => $data
+            'permission' => $data,
         ];
     }
 
-    public function roleMinusPermission(Role $role, RolePermissionRequest $request) {
+    public function roleMinusPermission(Role $role, RolePermissionRequest $request)
+    {
         $data = $request->validated();
+
         return [
             'role' => $role,
-            'permission' => $data
+            'permission' => $data,
         ];
     }
 }

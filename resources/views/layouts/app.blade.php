@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @vite('resources/css/app.css')
+    @vite('resources/css/style.css')
     <title>User-Manager-App</title>
 </head>
 
 <body class="bg-white dark:bg-gray-900">
     <div id="app"></div>
-    @vite('resources/js/app.js')
+    @vite('resources/js/main.js')
 </body>
 
 </html>

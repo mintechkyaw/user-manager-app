@@ -27,7 +27,7 @@ class ProfileUpdateRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                'unique:users,email,' . $this->user()->id,
+                'unique:users,email,'.$this->user()->id,
             ],
         ];
     }

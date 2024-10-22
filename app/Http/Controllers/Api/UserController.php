@@ -18,12 +18,15 @@ class UserController extends Controller
     public function index()
     {
         if (auth()->user()->hasPermissionTo('read-user')) {
-            $users = User::simplePaginate(10)->except(Auth::id());
+            $users = User::simplePaginate(perPage: 10)->except(Auth::id());
+
             return UserResource::collection($users);
         }
+
         return response()->json([
-            'msg' => "You don't have permission to view user"
-        ]);
+            'error' => 'Unauthorized',
+            'msg' => "You don't have permission to view user",
+        ], 403);
     }
 
     /**
@@ -35,73 +38,73 @@ class UserController extends Controller
             $data = $request->validated();
             $data['password'] = Hash::make($data['password']);
             $user = User::create($data);
+
             return response()->json([
                 'message' => 'User registered successfully',
-                'user' => $user
+                'user' => $user,
             ], 201);
         }
+
         return response()->json([
-            'msg' => "You don't have permission to Create User"
-        ]);
+            'error' => 'Unauthorized',
+            'msg' => "You don't have permission to Create User",
+        ], 403);
     }
 
     /**
      * Display the specified resource.
      */
-
     public function show(User $user)
     {
         if (auth()->user()->hasPermissionTo('read-user')) {
-            if ($user) {
-                return new UserResource($user);
-            }
-            return response()->json([
-                'msg' => 'User not found!'
-            ]);
+            return new UserResource($user);
         }
+
         return response()->json([
-            'msg' => "You don't have permission to view user"
-        ]);
+            'error' => 'Unauthorized',
+            'msg' => "You don't have permission to view user",
+        ], 403);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProfileUpdateRequest $request, $user)
+    public function update(ProfileUpdateRequest $request, User $user)
     {
-        if (auth()->user()->hasPermissionTo('update-user') ) {
-            $user = User::find($user);
+        if (auth()->user()->hasPermissionTo('update-user')) {
             $data = $request->validated();
             $user->update($data);
+
             return response()->json(['message' => 'User Profile Updated.'], 202);
         }
+
         return response()->json([
-            'msg' => "You don't have permission to edit user"
-        ]);
+            'error' => 'Unauthorized',
+            'msg' => "You don't have permission to edit user",
+        ], 403);
 
     }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($user)
+    public function destroy(User $user)
     {
         if (Auth::user()->hasPermissionTo('delete-user')) {
-
-            if ($user = User::find($user)) {
-                if ($user->id == Auth::id()) {
+            switch ($user->id) {
+                case Auth::id():
                     return response()->json(["message'=> 'You're deleting yourself "], 401);
-                } else {
+                default:
                     $user->delete();
+
                     return response()->json(['message' => 'User Deleted.'], 202);
-                }
             }
-            return response()->json([
-                'msg' => 'User not found!'
-            ]);
         }
+
         return response()->json([
-            'msg' => "You don't have permission to delete user"
-        ]);
+            'error' => 'Unauthorized',
+            'msg' => "You don't have permission to delete user",
+        ], 403);
 
     }
 }

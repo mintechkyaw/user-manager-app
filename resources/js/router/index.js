@@ -1,14 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginView from '../Auth/LoginView.vue';
-import RegisterView from '../Auth/RegisterView.vue';
-import UsersList from '../Pages/admin/UsersList.vue';
-import HomeView from '../Pages/HomeView.vue';
-import ProfileView from '../Pages/ProfileView.vue';
 import { isAuthenticated, roleCheck } from '../utils/auth';
-import DashboardView from '../Pages/admin/DashboardView.vue';
-import RolesPermissionView from '../Pages/admin/RolesView.vue';
-import PostsView from '../Pages/admin/PostsView.vue';
-import PermissionsView from '../Pages/admin/PermissionsView.vue';
 const router = createRouter({
     linkActiveClass: 'text-blue-700',
     linkExactActiveClass: 'text-blue-700',
@@ -17,36 +8,36 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: HomeView,
+            component: () => import('../Pages/HomeView.vue'),
         },
         {
             path: '/admin',
             meta: { requiresAuth: true, requiresAdmin:true},
             children: [
-                { path: 'dashboard', name: 'dashboard', component: DashboardView },
-                { path: 'posts', name: 'posts', component: PostsView },
-                { path: 'users', name: 'users', component: UsersList },
-                { path: 'roles', name: 'roles', component: RolesPermissionView },
-                { path: 'permissions', name: 'permissions', component: PermissionsView }
+                { path: 'dashboard', name: 'dashboard', component: () => import('../Pages/admin/DashboardView.vue') },
+                { path: 'posts', name: 'posts', component: () => import('../Pages/admin/PostsView.vue') },
+                { path: 'users', name: 'users', component: () => import('../Pages/admin/UsersList.vue') },
+                { path: 'roles', name: 'roles', component: () => import('../Pages/admin/RolesView.vue') },
+                { path: 'permissions', name: 'permissions', component: () => import('../Pages/admin/PermissionsView.vue') }
 
             ],
         },
         {
             path: '/profile',
             name: 'profile',
-            component: ProfileView,
+            component: () => import('../Pages/ProfileView.vue'),
             meta: { requiresAuth: true }
         },
         {
             path: '/login',
             name: 'login',
-            component: LoginView,
+            component: () => import('../Auth/LoginView.vue'),
             meta: { requiresAuth: false }
         },
         {
             path: '/register',
             name: 'register',
-            component: RegisterView,
+            component: () => import('../Auth/RegisterView.vue'),
             meta: { requiresAuth: false }
         },
 
@@ -57,7 +48,7 @@ router.beforeEach(async (to, from, next) => {
     switch (to.meta.requiresAdmin) {
         case true:
             const role = await roleCheck();
-            if (role == 'admin') {
+            if (role !== 'user') {
                 next()
             }
             else {

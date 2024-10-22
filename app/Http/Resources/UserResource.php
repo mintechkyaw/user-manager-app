@@ -23,7 +23,7 @@ class UserResource extends JsonResource
             'profile_created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'profile_updated_at' => $this->created_at != $this->updated_at
                 ? $this->updated_at->toDateTimeString()
-                : null
+                : null,
         ];
     }
 }

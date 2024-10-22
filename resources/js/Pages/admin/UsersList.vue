@@ -1,5 +1,6 @@
 <template>
     <AdminLayout>
+
         {{ error }}
         <div v-if="loading"
             class="flex items-center justify-center w-full   rounded-lg  dark:bg-gray-800 dark:border-gray-700">
@@ -17,6 +18,7 @@
             </div>
         </div>
         <div v-else>
+
             <div class="flex justify-between items-center mb-3 mx-0.5">
                 <div class="text-xl font-semibold">Users</div>
                 <button data-modal-target="default-modal" data-modal-toggle="default-modal"
@@ -25,7 +27,9 @@
                     Create Users
                 </button>
             </div>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+
+            <div v-if="users.length>0"
+             class="relative overflow-x-auto shadow-md sm:rounded-lg" >
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -71,49 +75,43 @@
                             <td class="px-6 py-4 space-x-2">
                                 <a @click=""
                                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                <a @click="deleteUser(user.id)"
+                                <a @click="store.deleteUser(user.id)"
                                     class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</a>
-
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            <div v-else>
+                Currently there is 0 user...
+            </div>
         </div>
     </AdminLayout>
+    <div id="toast-bottom-right" v-show="msg"
+        class="fixed flex items-center justify-between w-full max-w-xs p-4 space-x-4 text-black bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800"
+        role="alert">
+        <div class="text-sm font-normal">{{ msg }}</div>
+        <button type="button"
+            class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+            data-dismiss-target="#toast-bottom-right" aria-label="Close">
+            <span class="sr-only">Close</span>
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            </svg>
+        </button>
+    </div>
 </template>
 
 <script setup>
-import { onMounted, onRenderTracked, onRenderTriggered, onUpdated, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import AdminLayout from '../../Layouts/AdminLayout.vue';
-
-
-const users = ref([]);
-const loading = ref(false);
-const error = ref(null)
-const fetchUsers = async () => {
-    loading.value = true
-    try {
-        const response = await axios.get('api/admin/users')
-        users.value = response.data.data
-    } catch (error) {
-        error.value = error
-    } finally {
-        loading.value = false;
-    }
-}
-const deleteUser = async (userId) => {
-    try {
-        const response = await axios.delete('api/admin/users/' + userId)
-        console.log(response.data.message);
-        fetchUsers();
-    } catch (err) {
-        console.error(err.data);
-    }
-}
-
+import { useUserStore } from '../../store';
+import { storeToRefs } from 'pinia';
+const store = useUserStore();
+const { users, msg, error, loading } = storeToRefs(store);
 onMounted(() => {
-    fetchUsers();
+    store.fetchUsers();
 })
 
 </script>

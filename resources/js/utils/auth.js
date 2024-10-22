@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRouter } from "vue-router";
 import router from "../router";
 
 // Register Function 
@@ -67,14 +68,13 @@ export const roleCheck = async () => {
 
 const RoleBasedRedirect = async () => {
     try {
-        const response = await axios.get('api/user');        
-        switch (response.data.role) {
-            case 'admin':
-                router.replace({ name: 'dashboard' });
-                break;
+        const role = await roleCheck();        
+        switch (role) {
             case 'user':
                 router.replace({ name: 'home' });
+                break;
             default:
+                router.replace({ name: 'dashboard' });
                 break;
         }
     } catch (err) {

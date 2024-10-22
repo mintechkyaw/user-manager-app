@@ -19,6 +19,7 @@ class RegisterController extends Controller
         $user = User::create($data);
         $user->assignRole('user');
         $token = $user->createToken('Personal Access Token')->accessToken;
+
         return response()->json([
             'msg' => 'User registered successfully',
             'token' => $token,
