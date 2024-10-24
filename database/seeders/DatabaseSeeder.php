@@ -45,9 +45,9 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('asdf1234..'),
         ]);
 
-        // $adminUser->assignRole('admin');
-        // $editorUser->assignRole('editor');
-        // User::factory(10)->create();
+        $adminUser->assignRole('admin');
+        $editorUser->assignRole('editor');
+        User::factory(10)->create();
 
     }
 }

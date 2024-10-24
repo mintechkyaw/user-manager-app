@@ -7,6 +7,6 @@ export default defineConfig({
             input: ['resources/css/style.css', 'resources/js/main.js'],
             refresh: true,
         }),
-        vue(),
+        vue()
     ],
 });

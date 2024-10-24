@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import axios from 'axios';
 import AppLayout from '../Layouts/AppLayout.vue';
 import router from '../router';
 import { useUserStore } from '../store';
@@ -9,7 +8,7 @@ import { logout } from '../utils/auth';
 
 
 const auth = useUserStore()
-const { name, email, role } = storeToRefs(auth)
+const { authUser } = storeToRefs(auth)
 
 </script>
 
@@ -24,17 +23,17 @@ const { name, email, role } = storeToRefs(auth)
                 <dl class="divide-y divide-gray-100">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Full name</dt>
-                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ name }}</dd>
+                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ authUser.name }}</dd>
                     </div>
 
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Email address</dt>
-                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ email }}
+                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ authUser.email }}
                         </dd>
                     </div>
-                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0" v-if="role !== 'user'">
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0" v-if="authUser.role !== 'user'">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Role</dt>
-                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ role }}</dd>
+                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ authUser.role }}</dd>
                     </div>
                 </dl>
                 <div class="mt-5 flex justify-end items-center">

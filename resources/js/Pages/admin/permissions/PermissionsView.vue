@@ -13,8 +13,7 @@
                 <span class="font-medium"> {{ error }}</span>
             </div>
         </div>
-        <div v-else
-         class="flex justify-between items-center mb-3 mx-0.5">
+        <div v-else class="flex justify-between items-center mb-3 mx-0.5">
             <div class="text-2xl font-semibold">Permissions</div>
             <button data-modal-target="default-modal" data-modal-toggle="default-modal"
                 class="block text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -22,8 +21,7 @@
                 Create Permission
             </button>
         </div>
-        <div v-if="permissions.length >0"
-         class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div v-if="permissions.length > 0" class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -66,13 +64,13 @@
 
 <script setup>
 import { storeToRefs } from 'pinia';
-import AdminLayout from '../../Layouts/AdminLayout.vue';
-import { usePermissionStore } from '../../store';
+
+import { usePermissionStore } from '../../../store';
 import { onMounted } from 'vue';
 const store = usePermissionStore();
 const { permissions, error, loading } = storeToRefs(store);
 onMounted(() => {
-    store.getPermissions();
+    store.fetchPermissions();
 })
 
 </script>

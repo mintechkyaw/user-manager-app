@@ -1,7 +1,6 @@
 <template>
     <AdminLayout>
-
-        {{ error }}
+        <RouterView />
         <div v-if="loading"
             class="flex items-center justify-center w-full   rounded-lg  dark:bg-gray-800 dark:border-gray-700">
             <div role="status">
@@ -17,19 +16,30 @@
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
+        <div v-else-if="error"
+            class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
+            role="alert">
+            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor" viewBox="0 0 20 20">
+                <path
+                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <span class="sr-only">Info</span>
+            <div>
+                <span class="font-medium"> {{ error.error }}</span> {{ error.msg }}
+            </div>
+        </div>
         <div v-else>
-
             <div class="flex justify-between items-center mb-3 mx-0.5">
                 <div class="text-xl font-semibold">Users</div>
-                <button data-modal-target="default-modal" data-modal-toggle="default-modal"
+                <RouterLink :to="{ name: 'usercreate' }"
                     class="block text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button">
                     Create Users
-                </button>
+                </RouterLink>
             </div>
 
-            <div v-if="users.length>0"
-             class="relative overflow-x-auto shadow-md sm:rounded-lg" >
+            <div v-if="users.length > 0" class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -73,10 +83,11 @@
                                 {{ user.profile_updated_at ?? user.profile_created_at }}
                             </td>
                             <td class="px-6 py-4 space-x-2">
-                                <a @click=""
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                <a @click="store.deleteUser(user.id)"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</a>
+                                <RouterLink :to="{ name: 'useredit', params: { id: user.id } }"
+                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit
+                                </RouterLink>
+                                <button @click="store.deleteUser(user.id)"
+                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -87,29 +98,41 @@
             </div>
         </div>
     </AdminLayout>
-    <div id="toast-bottom-right" v-show="msg"
-        class="fixed flex items-center justify-between w-full max-w-xs p-4 space-x-4 text-black bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800"
+    <div id="toast-bottom-right" v-if="msg"
+        class="fixed flex items-center justify-between w-full max-w-sm p-4 space-x-4 text-blue-900 bg-white divide-x divide-gray-200 rounded-lg shadow-lg right-5 bottom-5 dark:text-gray-100 dark:divide-gray-700 dark:bg-gray-800 transition-all duration-300 ease-in-out"
         role="alert">
-        <div class="text-sm font-normal">{{ msg }}</div>
+        <!-- Message section -->
+        <div class="ml-4 text-sm font-semibold">
+            <span>{{ msg }}</span>
+        </div>
+
+        <!-- Close button -->
         <button type="button"
-            class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
-            data-dismiss-target="#toast-bottom-right" aria-label="Close">
+            class="ms-auto -mx-1.5 -my-1.5 text-gray-500 hover:text-blue-700 rounded-full focus:ring-2 focus:ring-blue-300 p-2 inline-flex items-center justify-center h-8 w-8 bg-transparent hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 transition duration-300 ease-in-out"
+            @click="msg = null" aria-label="Close">
             <span class="sr-only">Close</span>
-            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
     </div>
+
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import AdminLayout from '../../Layouts/AdminLayout.vue';
-import { useUserStore } from '../../store';
+
+import { onMounted, onUpdated, } from 'vue';
+import { useUserStore } from '../../../store';
 import { storeToRefs } from 'pinia';
+import { RouterView, RouterLink } from 'vue-router';
 const store = useUserStore();
 const { users, msg, error, loading } = storeToRefs(store);
+
+onUpdated(() => {
+    store.fetchUsers()
+})
+
 onMounted(() => {
     store.fetchUsers();
 })

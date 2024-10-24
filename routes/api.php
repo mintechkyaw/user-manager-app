@@ -9,14 +9,13 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Resources\UserResource;
-use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', RegisterController::class)->middleware([HandlePrecognitiveRequests::class]);
+Route::post('/register', RegisterController::class)->middleware(['validation']);
 Route::post('/login', LoginController::class);
 
-Route::middleware(['auth:api',HandlePrecognitiveRequests::class])->group(function () {
+Route::middleware(['auth:api', 'validation'])->group(function () {
 
     // Auth Related Routes
     Route::post('/logout', LogoutController::class);
@@ -32,13 +31,11 @@ Route::middleware(['auth:api',HandlePrecognitiveRequests::class])->group(functio
 
 });
 
-Route::prefix('/admin')->middleware(['auth:api', 'role:admin'])->group(function () {
+// Admin Only Routes
+Route::prefix('/admin')->middleware(['auth:api', 'role:admin', 'validation'])->group(function () {
     Route::apiResource('/roles', RoleController::class);
     Route::apiResource('/permissions', PermissionController::class);
     Route::put('/role-permission/{role}', [RolePermissionController::class, 'roleAddPermission']);
     Route::delete('/role-permission/{role}', [RolePermissionController::class, 'roleMinusPermission']);
 });
 
-Route::prefix('/editor')->middleware(['auth:api', 'role:editor', ''])->group(function () {
-    Route::apiResource('/users', UserController::class)->except(['store', 'destroy']);
-});

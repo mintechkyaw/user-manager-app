@@ -23,7 +23,7 @@
                             class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
                             Home </RouterLink>
                     </li>
-                    <li v-if="auth.role === 'admin'">
+                    <li v-if="authUser.role !== 'user'">
                         <RouterLink :to="{ name: 'dashboard' }"
                             class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
                             Dashboard </RouterLink>
@@ -43,12 +43,9 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '../store';
-import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 
-const auth = useUserStore();
-
-onMounted(() => {
-    auth.getUserInfo();
-})
+const store = useUserStore();
+const { authUser } = storeToRefs(store)
 
 </script>

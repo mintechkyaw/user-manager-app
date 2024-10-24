@@ -21,8 +21,20 @@ class RoleRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|string|max:255',
-        ];
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            return [
+                'name' => ['required', 'string', 'max:255', 'unique:roles,name,' . $this->route('role')->id],
+                'permissions' => ['required', 'sometimes', 'array'],
+                'permissions.*' => ['required', 'sometimes', 'string', 'exists:permissions,name'],
+            ];
+        } elseif ($this->isMethod('post')) {
+            return [
+                'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
+                'permissions' => ['required', 'sometimes', 'array'],
+                'permissions.*' => ['required', 'sometimes', 'string', 'exists:permissions,name'],
+            ];
+        }
+
+        return [];
     }
 }

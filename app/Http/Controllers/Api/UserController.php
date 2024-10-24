@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         if (auth()->user()->hasPermissionTo('read-user')) {
-            $users = User::simplePaginate(perPage: 10)->except(Auth::id());
+            $users = User::simplePaginate(10)->except(Auth::id());
 
             return UserResource::collection($users);
         }
@@ -32,16 +33,15 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RegisterRequest $request)
+    public function store(UserRequest $request)
     {
         if (auth()->user()->hasPermissionTo('create-user')) {
             $data = $request->validated();
             $data['password'] = Hash::make($data['password']);
             $user = User::create($data);
-
+            $user->assignRole($data['role']);
             return response()->json([
                 'message' => 'User registered successfully',
-                'user' => $user,
             ], 201);
         }
 
@@ -74,6 +74,7 @@ class UserController extends Controller
         if (auth()->user()->hasPermissionTo('update-user')) {
             $data = $request->validated();
             $user->update($data);
+            $user->syncRoles($data['role']);
 
             return response()->json(['message' => 'User Profile Updated.'], 202);
         }
@@ -96,7 +97,6 @@ class UserController extends Controller
                     return response()->json(["message'=> 'You're deleting yourself "], 401);
                 default:
                     $user->delete();
-
                     return response()->json(['message' => 'User Deleted.'], 202);
             }
         }

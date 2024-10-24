@@ -16,13 +16,12 @@ class PostController extends Controller
     {
         if (auth()->user()->hasPermissionTo('read-post')) {
             $posts = Post::latest()->get();
-
             return PostResource::collection($posts);
         }
 
         return response()->json([
             'error' => 'Unauthorized',
-            'message' => 'Nah! You can\'t see the posts',
+            'msg' => 'Nah! You can\'t see the posts',
         ], 403);
     }
 

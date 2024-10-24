@@ -5,12 +5,18 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@eslint/js": "^9.13.0",
         "@vitejs/plugin-vue": "^5.1.4",
         "autoprefixer": "^10.4.20",
+        "eslint": "^9.13.0",
+        "eslint-plugin-vue": "^9.29.1",
         "flowbite": "^2.5.2",
+        "globals": "^15.11.0",
         "postcss": "^8.4.47",
         "tailwindcss": "^3.4.13",
-        "vite": "^5.4.8"
+        "vite": "^5.4.8",
+        "vite-plugin-vue-devtools": "^7.5.4",
+        "vite-plugin-vue-inspector": "^5.2.0"
     },
     "dependencies": {
         "axios": "^1.7.7",
