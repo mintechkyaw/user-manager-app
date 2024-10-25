@@ -5,6 +5,7 @@ import { createPinia } from 'pinia'
 import 'flowbite'
 
 import App from './App.vue';
+const pinia = createPinia();
 const app = createApp(App);
 
 import AdminLayout from './Layouts/AdminLayout.vue';
@@ -16,6 +17,6 @@ app.component('GuestLayout', GuestLayout)
     .component('AppLayout', AppLayout)
     .component('AdminLayout', AdminLayout)
 
+app.use(pinia);
 app.use(router);
-app.use(createPinia());
 app.mount('#app');

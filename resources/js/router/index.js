@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { isAuthenticated, roleCheck } from '../utils/auth';
+import { useUserStore } from '../store';
+import { storeToRefs } from 'pinia';
 const router = createRouter({
     linkActiveClass: 'text-blue-700',
     linkExactActiveClass: 'text-blue-700',
@@ -19,43 +21,74 @@ const router = createRouter({
         },
         {
             path: '/',
-            meta: { requiresAuth: true, requiresNonNormalUser: true },
+            meta: { requiresAuth: true },
             children: [
-                { path: 'dashboard', name: 'dashboard', component: () => import('../Pages/admin/DashboardView.vue') },
+                {
+                    path: 'dashboard',
+                    name: 'dashboard',
+                    meta: { requiresNonNormalUser: true },
+                    component: () => import('../Pages/admin/DashboardView.vue')
+                },
                 {
                     path: 'posts', name: 'posts', component: () => import('../Pages/admin/posts/PostsView.vue'),
+                    meta: { requiresNonNormalUser: true },
                     children: [
                         {
                             path: 'create',
                             name: 'postcreate',
-                            component: () => import('../Pages/admin/posts/PostCreate.vue')
+                            component: () => import('../Pages/admin/posts/PostCreate.vue'),
+                            beforeEnter: async (to, from) => {
+                                const store = useUserStore();
+                                await store.authUserInfo();
+                                const { authUser } = storeToRefs(store)
+                                return authUser.value.permissions.includes('create-post')
+                            },
                         },
                         {
                             path: ':id/edit',
                             name: 'postedit',
                             component: () => import('../Pages/admin/posts/PostEdit.vue'),
-                            props: true
+                            props: true,
+                            beforeEnter: async (to, from) => {
+                                const store = useUserStore();
+                                const { authUser } = storeToRefs(store)
+                                return authUser.value.permissions.includes('update-post')
+                            },
                         }
                     ]
                 },
                 {
                     path: 'users', name: 'users', component: () => import('../Pages/admin/users/UsersView.vue'),
+                    meta: { requiresNonNormalUser: true },
                     children: [
                         {
                             path: 'create',
                             name: 'usercreate',
-                            component: () => import('../Pages/admin/users/UserCreate.vue')
+                            component: () => import('../Pages/admin/users/UserCreate.vue'),
+                            beforeEnter: async (to, from) => {
+                                const store = useUserStore();
+                                await store.authUserInfo();
+                                const { authUser } = storeToRefs(store)
+                                return authUser.value.permissions.includes('create-user')
+                            },
                         },
                         {
                             path: ':id/edit',
                             name: 'useredit',
                             component: () => import('../Pages/admin/users/UserEdit.vue'),
-                            props: true
+                            props: true,
+                            beforeEnter: async (to, from) => {
+                                const store = useUserStore();
+                                await store.authUserInfo();
+                                const { authUser } = storeToRefs(store)
+                                return authUser.value.permissions.includes('update-user')
+                            },
                         }
                     ]
                 },
                 {
                     path: 'roles', name: 'roles', component: () => import('../Pages/admin/roles/RolesView.vue'),
+                    meta: { requiresAdmin: true },
                     children: [
                         {
                             path: 'create',
@@ -70,7 +103,7 @@ const router = createRouter({
                         }
                     ]
                 },
-                { path: 'permissions', name: 'permissions', component: () => import('../Pages/admin/permissions/PermissionsView.vue') }
+                { path: 'permissions', name: 'permissions', meta: { requiresAdmin: true }, component: () => import('../Pages/admin/permissions/PermissionsView.vue') }
 
             ],
         },
@@ -112,6 +145,23 @@ router.beforeEach(async (to, from, next) => {
             break;
     }
 
+})
+
+router.beforeEach(async (to, from, next) => {
+    switch (to.meta.requiresAdmin) {
+        case true:
+            const role = await roleCheck();
+            if (role === 'admin') {
+                next()
+            }
+            else {
+                next({ name: 'dashboard' })
+            }
+            break;
+        default:
+            next();
+            break;
+    }
 })
 
 router.beforeEach(async (to, from, next) => {

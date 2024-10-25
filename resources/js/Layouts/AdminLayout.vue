@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import AdminNavBar from '../components/AdminNavBar.vue';
+import { useUserStore } from '../store';
+import { storeToRefs } from 'pinia';
+const auth = useUserStore();
+const { authUser } = storeToRefs(auth);
 </script>
 
 <template>
@@ -25,7 +29,7 @@ import AdminNavBar from '../components/AdminNavBar.vue';
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink :to="{name:'posts'}"
+                    <RouterLink :to="{ name: 'posts' }"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -51,7 +55,7 @@ import AdminNavBar from '../components/AdminNavBar.vue';
                         <span class="flex-1 ms-3 whitespace-nowrap">Users</span>
                     </RouterLink>
                 </li>
-                <li>
+                <li v-if="authUser.role === 'admin'">
                     <RouterLink :to="{ name: 'roles' }"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -63,7 +67,7 @@ import AdminNavBar from '../components/AdminNavBar.vue';
                         <span class="flex-1 ms-3 whitespace-nowrap">Roles</span>
                     </RouterLink>
                 </li>
-                <li>
+                <li v-if="authUser.role === 'admin'">
                     <RouterLink :to="{ name: 'permissions' }"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
