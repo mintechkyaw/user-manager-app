@@ -27,9 +27,8 @@ class ProfileUpdateRequest extends FormRequest
                 'sometimes',
                 'email',
                 'max:255',
-                'unique:users,email,'.$this->route('user')->id,
-            ],
-            'role' => ['required', 'sometimes', 'exists:roles,name'],
+                'unique:users,email,' . $this->user()->id,
+            ]
         ];
     }
 }

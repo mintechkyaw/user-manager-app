@@ -16,6 +16,7 @@ class PostController extends Controller
     {
         if (auth()->user()->hasPermissionTo('read-post')) {
             $posts = Post::latest()->get();
+
             return PostResource::collection($posts);
         }
 

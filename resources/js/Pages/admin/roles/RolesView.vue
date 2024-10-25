@@ -56,7 +56,7 @@
                 </div>
                 <div>
 
-                    <span v-for="permission in role.permissions"
+                    <span v-for="permission in role.permissions" :key="permission.id"
                         class=" inline-block mt-1.5 bg-blue-100 text-blue-800 text-base font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{
                             permission.name }}</span>
 

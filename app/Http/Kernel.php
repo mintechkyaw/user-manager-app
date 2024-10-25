@@ -66,6 +66,6 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-        'validation' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class
+        'validation' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
     ];
 }

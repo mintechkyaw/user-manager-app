@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\ProfileUpdateController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ Route::middleware(['auth:api', 'validation'])->group(function () {
 
     // Auth Related Routes
     Route::post('/logout', LogoutController::class);
+    Route::post('/update-profile', ProfileUpdateController::class);
     Route::get('/user', function (Request $request) {
         $user = new UserResource($request->user()->load('roles'));
 
@@ -38,4 +40,3 @@ Route::prefix('/admin')->middleware(['auth:api', 'role:admin', 'validation'])->g
     Route::put('/role-permission/{role}', [RolePermissionController::class, 'roleAddPermission']);
     Route::delete('/role-permission/{role}', [RolePermissionController::class, 'roleMinusPermission']);
 });
-

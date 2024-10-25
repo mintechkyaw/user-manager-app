@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->roles()->first() ? $this->roles->first()->name : null,
-            // 'permission' => new PermissionResource($this->roles()->first()),
+            // 'permission' => new PermissionResource($this->roles()->first()-),
             'profile_created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'profile_updated_at' => $this->created_at != $this->updated_at
                 ? $this->updated_at->toDateTimeString()

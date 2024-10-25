@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -40,6 +38,7 @@ class UserController extends Controller
             $data['password'] = Hash::make($data['password']);
             $user = User::create($data);
             $user->assignRole($data['role']);
+
             return response()->json([
                 'message' => 'User registered successfully',
             ], 201);
@@ -69,7 +68,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProfileUpdateRequest $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
         if (auth()->user()->hasPermissionTo('update-user')) {
             $data = $request->validated();
@@ -97,6 +96,7 @@ class UserController extends Controller
                     return response()->json(["message'=> 'You're deleting yourself "], 401);
                 default:
                     $user->delete();
+
                     return response()->json(['message' => 'User Deleted.'], 202);
             }
         }

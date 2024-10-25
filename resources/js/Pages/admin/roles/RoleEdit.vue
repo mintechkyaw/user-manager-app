@@ -14,7 +14,7 @@ const props = defineProps({
     id: String
 });
 
-const form = useForm('put', 'api/admin/roles/'+props.id, {
+const form = useForm('put', 'api/admin/roles/' + props.id, {
     name: '',
     permissions: []
 });
@@ -24,10 +24,9 @@ onMounted(async () => {
     await permissionStore.fetchPermissions();
 });
 
-// Watch for changes in the role and update the form
 watch(role, (roleData) => {
     form.name = roleData.name;
-    form.permissions = roleData.permissions.map(permission => permission.name); // Map to only get the names
+    form.permissions = roleData.permissions.map(permission => permission.name);
 });
 </script>
 
@@ -37,6 +36,9 @@ watch(role, (roleData) => {
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <!-- <pre>
+                        {{ form }}
+                    </pre> -->
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                         {{ edit ? 'Edit Role' : 'Role Details' }}
                     </h3>
@@ -68,18 +70,16 @@ watch(role, (roleData) => {
                                 <div v-for="permission in permissions" :key="permission.id" class="flex items-center">
                                     <input :id="permission.id" type="checkbox" :value="permission.name"
                                         v-model="form.permissions" :disabled="!edit"
-                                        :checked="form.permissions.some(p => p === permission.name)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500
-                                    dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800
-                                    focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                        :checked="form.permissions.some(p => p === permission.name)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     <label :for="permission.id"
                                         class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                         {{ permission.name }}
                                     </label>
                                 </div>
                             </div>
-                            <!-- <p v-if="form.invalid('permissions')" class="mt-2 text-sm text-red-600 dark:text-red-500">
+                            <p v-if="form.invalid('permissions')" class="mt-2 text-sm text-red-600 dark:text-red-500">
                                 {{ form.errors.permissions }}
-                            </p> -->
+                            </p>
                         </div>
                     </div>
                     <button v-if="edit" type="button" :disabled="form.hasErrors"

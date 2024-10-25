@@ -44,7 +44,7 @@
                     class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <div>
                         <h5 class="mb-2 flex text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            {{ post.title }}
+                            {{ post.title.split('').slice(0, 50).join('')  }}
                             <button type="button" @click="store.deletePost(post.id)"
                                 class=" text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600  dark:hover:text-white">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { onBeforeUpdate, onMounted, onUpdated } from 'vue';
+import {  onMounted, onUpdated } from 'vue';
 import { usePostStore } from '../../../store';
 import { storeToRefs } from 'pinia';
 import { RouterView } from 'vue-router';

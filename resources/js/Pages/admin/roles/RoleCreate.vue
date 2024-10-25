@@ -52,10 +52,11 @@ onMounted(() => {
                         <div class="col-span-2">
                             <label for="name"
                                 class="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Permissions</label>
-                            <div class="grid grid-cols-2 gap-4"> <!-- The grid only contains the checkboxes -->
+                            <div class="grid grid-cols-2 gap-4">
                                 <div v-for="permission in permissions" :key="permission.id" class="flex items-center">
                                     <input :id="permission.id" type="checkbox" v-model="form.permissions"
                                         :value="permission.name"
+                                        @change="form.validate('permissions')"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     <label :for="permission.id"
                                         class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">

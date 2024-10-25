@@ -26,6 +26,17 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    const UpdateAuthUserInfo = async (form) => {
+        try {
+            const response = await axios.post('/api/update-profile',form);
+            authUser.value = response.data.user
+            msg.value = response.data.message
+        } catch (err) {
+            error.value = err.response.data
+            console.info(error.value)
+        }
+    }
+
     const fetchUser = async (userId) => {
         try {
             const response = await axios.get('api/users/' + userId)
@@ -96,7 +107,7 @@ export const useUserStore = defineStore('user', () => {
         authUserInfo();
     })
 
-    return { authUser, msg, loading, error, user, users, authUserInfo, fetchUsers, fetchUser, createUser, updateUser, deleteUser }
+    return { authUser, msg, loading, error, user, users, authUserInfo, UpdateAuthUserInfo, fetchUsers, fetchUser, createUser, updateUser, deleteUser }
 });
 
 // this is post store

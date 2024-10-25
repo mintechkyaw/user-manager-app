@@ -61,10 +61,10 @@ watch(post, (postData) => {
                                     form.errors.title }}</p>
                         </div>
                         <div class="col-span-2">
-                            <label for="description"
+                            <label for="content"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
-                            <textarea id="description" rows="6" v-model="form.content"
-                                @change="form.validate('content')" :disabled="!edit"
+                            <textarea id="content" rows="6" v-model="form.content" @change="form.validate('content')"
+                                :disabled="!edit"
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Write post content here...."></textarea>
                             <p v-if="form.invalid('content')" class="mt-2 text-sm text-red-600 dark:text-red-500">
