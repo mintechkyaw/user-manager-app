@@ -26,7 +26,7 @@ onMounted(async () => {
 
 watch(role, (roleData) => {
     form.name = roleData.name;
-    form.permissions = roleData.permissions.map(permission => permission.name);
+    form.permissions = roleData.permissions;
 });
 </script>
 

@@ -29,18 +29,19 @@ class UserRequest extends FormRequest
                 'password' => ['required', 'string', Password::default()],
                 'role' => ['sometimes', 'exists:roles,name'],
             ];
-        } else if ($this->isMethod('put') || $this->isMethod('patch')) {
+        } elseif ($this->isMethod('put') || $this->isMethod('patch')) {
             return [
                 'name' => ['sometimes', 'string', 'max:255'],
                 'email' => [
                     'sometimes',
                     'email',
                     'max:255',
-                    'unique:users,email,' . $this->route('user')->id,
+                    'unique:users,email,'.$this->route('user')->id,
                 ],
                 'role' => ['required', 'sometimes', 'exists:roles,name'],
             ];
         }
+
         return [];
     }
 }

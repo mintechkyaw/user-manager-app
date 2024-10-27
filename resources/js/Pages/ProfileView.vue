@@ -21,6 +21,11 @@ const form = useForm('post', 'api/update-profile', {
     email: ''
 })
 
+async function updateProfile(form) {
+    await auth.UpdateAuthUserInfo(form)
+    edit.value = !edit.value
+}
+
 watch(authUser, (userData) => {
     form.name = userData.name
     form.email = userData.email
@@ -64,7 +69,7 @@ onMounted(async () => {
                             <label class="text-sm font-medium leading-6 text-gray-900">Full name</label>
                             <input class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 border-0"
                                 :disabled="!edit" type="text" v-model="form.name" @change="form.validate('name')">
-                        
+
                         </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <label class="text-sm font-medium leading-6 text-gray-900">Email address</label>
@@ -76,11 +81,12 @@ onMounted(async () => {
                     </form>
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0" v-if="authUser.role !== 'user'">
                         <label class="text-sm font-medium leading-6 text-gray-900">Role</label>
-                        <div class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ authUser.role }}</div>
+                        <div class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ authUser.role }}
+                        </div>
                     </div>
                 </dl>
                 <div class="mt-5 flex justify-end items-center space-x-2">
-                    <button type="submit" v-if="edit" :disabled="form.hasErrors" @click="auth.UpdateAuthUserInfo(form)"
+                    <button type="submit" v-if="edit" :disabled="form.hasErrors" @click="updateProfile(form)"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update
                         Information</button>
                     <button type="submit" v-else @click="logout"

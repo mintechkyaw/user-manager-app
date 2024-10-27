@@ -44,8 +44,11 @@
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 
 const store = useUserStore();
 const { authUser } = storeToRefs(store)
-
+onMounted(() => {
+    store.authUserInfo();
+})
 </script>

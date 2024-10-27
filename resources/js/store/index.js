@@ -1,12 +1,13 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { onMounted, ref } from "vue";
+import { computed, onBeforeUpdate, onMounted, onUpdated, ref } from "vue";
 import router from "../router";
 
 // this is user store
 export const useUserStore = defineStore('user', () => {
 
     const authUser = ref([])
+    const authPermissions = computed(() => authUser.value.permissions)
 
     const loading = ref(false);
     const msg = ref(null);
@@ -25,10 +26,11 @@ export const useUserStore = defineStore('user', () => {
             console.error(err);
         }
     }
+    
 
     const UpdateAuthUserInfo = async (form) => {
         try {
-            const response = await axios.post('/api/update-profile',form);
+            const response = await axios.post('/api/update-profile', form);
             authUser.value = response.data.user
             msg.value = response.data.message
         } catch (err) {
@@ -95,19 +97,14 @@ export const useUserStore = defineStore('user', () => {
             try {
                 const response = await axios.delete('api/users/' + userId)
                 console.log(response.data.message);
+                fetchUsers();
             } catch (err) {
                 msg.value = err.response.data.msg
-                // error.value = err.response.data
             }
         }
-
     }
 
-    onMounted(() => {
-        authUserInfo();
-    })
-
-    return { authUser, msg, loading, error, user, users, authUserInfo, UpdateAuthUserInfo, fetchUsers, fetchUser, createUser, updateUser, deleteUser }
+    return { authUser, authPermissions, msg, loading, error, user, users, authUserInfo, UpdateAuthUserInfo, fetchUsers, fetchUser, createUser, updateUser, deleteUser }
 });
 
 // this is post store
@@ -193,6 +190,8 @@ export const useRoleStore = defineStore('role', () => {
     const role = ref([])
     const roles = ref([]);
 
+    const userStore = useUserStore();
+
     const fetchRole = async (roleId) => {
         try {
             const response = await axios.get('api/admin/roles/' + roleId);
@@ -222,6 +221,7 @@ export const useRoleStore = defineStore('role', () => {
         } catch (err) {
             console.error(err)
         } finally {
+            userStore.authUserInfo();
             console.log('Role created successfully.')
             router.push({ name: 'roles' })
         }
@@ -235,6 +235,7 @@ export const useRoleStore = defineStore('role', () => {
         } catch (err) {
             error.value = err
         } finally {
+            userStore.authUserInfo();
             console.info('Role updated successfully')
             router.push({ name: 'roles' })
         }

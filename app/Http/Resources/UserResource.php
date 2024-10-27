@@ -30,6 +30,7 @@ class UserResource extends JsonResource
                     : null,
             ];
         }
+
         return [
             'id' => $this->id,
             'name' => $this->name,

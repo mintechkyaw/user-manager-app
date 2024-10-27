@@ -1,10 +1,14 @@
-<script setup lang="ts">
+<script setup>
 import { RouterLink } from 'vue-router';
 import AdminNavBar from '../components/AdminNavBar.vue';
 import { useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 const auth = useUserStore();
 const { authUser } = storeToRefs(auth);
+onMounted(() => {
+    auth.authUserInfo();
+})
 </script>
 
 <template>
@@ -28,7 +32,7 @@ const { authUser } = storeToRefs(auth);
                         <span class="ms-3">Dashboard</span>
                     </RouterLink>
                 </li>
-                <li>
+                <li v-if="auth.authPermissions?.includes('read-post')">
                     <RouterLink :to="{ name: 'posts' }"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -42,8 +46,7 @@ const { authUser } = storeToRefs(auth);
                         <span class="flex-1 ms-3 whitespace-nowrap">Posts</span>
                     </RouterLink>
                 </li>
-
-                <li>
+                <li v-if="auth.authPermissions?.includes('read-user')">
                     <RouterLink :to="{ name: 'users' }"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"

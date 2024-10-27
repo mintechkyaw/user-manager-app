@@ -33,7 +33,7 @@
             <div class="flex justify-between items-center mb-3 mx-0.5">
                 <div class="text-2xl font-semibold">Posts</div>
                 <!-- Post Creation -->
-                <RouterLink :to="{ name: 'postcreate' }"
+                <RouterLink v-if="auth.authUser.permissions.includes('create-post')" :to="{ name: 'postcreate' }"
                     class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Create A Post
                 </RouterLink>
@@ -45,7 +45,7 @@
                     <div>
                         <h5 class="mb-2 flex text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             {{ post.title.split('').slice(0, 50).join('')  }}
-                            <button type="button" @click="store.deletePost(post.id)"
+                            <button type="button" v-if="auth.authPermissions?.includes('delete-post')"  @click="store.deletePost(post.id)"
                                 class=" text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600  dark:hover:text-white">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 14 14">
@@ -58,7 +58,7 @@
                     </div>
                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"
                         v-html="post.content.split('').slice(0, 100).join('') + '.....'"></p>
-                    <RouterLink :to="{ name: 'postedit', params: { id: post.id } }"
+                    <RouterLink  :to="{ name: 'postedit', params: { id: post.id } }"
                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Read more
                         <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
@@ -94,14 +94,17 @@
 
 <script setup>
 import {  onMounted, onUpdated } from 'vue';
-import { usePostStore } from '../../../store';
+import { usePostStore, useUserStore } from '../../../store';
 import { storeToRefs } from 'pinia';
 import { RouterView } from 'vue-router';
+const auth = useUserStore();
+
 const store = usePostStore();
 const { msg, loading, error, posts } = storeToRefs(store)
 
-onMounted(() => {
-    store.fetchPosts();
+onMounted(async() => {
+    await auth.authUserInfo();
+    await store.fetchPosts();
 })
 
 onUpdated(() => {

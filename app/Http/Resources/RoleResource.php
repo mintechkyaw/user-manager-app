@@ -19,7 +19,9 @@ class RoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
-            'permissions' => $this->permissions->count() > 0 ? PermissionResource::collection($this->permissions) : null,
+            'permissions' => $this->permissions->map(function ($permission) {
+                return $permission->name;
+            })
         ];
     }
 }

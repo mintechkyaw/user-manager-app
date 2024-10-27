@@ -1,3 +1,21 @@
+<script setup>
+
+import { onMounted, onUpdated, ref, watch, } from 'vue';
+import { useUserStore } from '../../../store';
+import { storeToRefs } from 'pinia';
+import { RouterView, RouterLink } from 'vue-router';
+const store = useUserStore();
+const { authUser, users, msg, error, loading } = storeToRefs(store);
+onUpdated(() => {
+    store.fetchUsers()
+})
+
+onMounted(async () => {
+    await store.authUserInfo();
+    await store.fetchUsers();
+})
+
+</script>
 <template>
     <AdminLayout>
         <RouterView />
@@ -32,7 +50,7 @@
         <div v-else>
             <div class="flex justify-between items-center mb-3 mx-0.5">
                 <div class="text-xl font-semibold">Users</div>
-                <RouterLink :to="{ name: 'usercreate' }"
+                <RouterLink :to="{ name: 'usercreate' }" v-if="authUser.permissions?.includes('create-user')"
                     class="block text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button">
                     Create Users
@@ -58,7 +76,7 @@
                             <th scope="col" class="px-6 py-3">
                                 Latest Updated At
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th v-if="store.authPermissions?.includes('update-user') || store.authPermissions?.includes('delete-user')" scope="col" class="px-6 py-3">
                                 Action
                             </th>
                         </tr>
@@ -83,10 +101,10 @@
                                 {{ user.profile_updated_at ?? user.profile_created_at }}
                             </td>
                             <td class="px-6 py-4 space-x-2">
-                                <RouterLink :to="{ name: 'useredit', params: { id: user.id } }"
+                                <RouterLink v-if="store.authPermissions?.includes('update-user')"  :to="{ name: 'useredit', params: { id: user.id } }"
                                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit
                                 </RouterLink>
-                                <button @click="store.deleteUser(user.id)"
+                                <button v-if="store.authPermissions?.includes('delete-user')" @click="store.deleteUser(user.id)"
                                     class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</button>
                             </td>
                         </tr>
@@ -119,22 +137,3 @@
     </div>
 
 </template>
-
-<script setup>
-
-import { onMounted, onUpdated, } from 'vue';
-import { useUserStore } from '../../../store';
-import { storeToRefs } from 'pinia';
-import { RouterView, RouterLink } from 'vue-router';
-const store = useUserStore();
-const { users, msg, error, loading } = storeToRefs(store);
-
-onUpdated(() => {
-    store.fetchUsers()
-})
-
-onMounted(() => {
-    store.fetchUsers();
-})
-
-</script>

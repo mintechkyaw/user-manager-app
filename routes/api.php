@@ -23,6 +23,7 @@ Route::middleware(['auth:api', 'validation'])->group(function () {
     Route::post('/update-profile', ProfileUpdateController::class);
     Route::get('/user', function (Request $request) {
         $user = new UserResource($request->user());
+
         return response()->json($user, 200);
     });
 

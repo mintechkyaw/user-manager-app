@@ -19,6 +19,9 @@ class PermissionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'guard_name' => $this->guard_name,
+            'attached_role' => $this->roles->map(function ($role) {
+                return $role->name;
+            }),
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
         ];
     }

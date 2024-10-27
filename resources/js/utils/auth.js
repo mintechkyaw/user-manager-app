@@ -65,7 +65,7 @@ export const roleCheck = async () => {
     }
 };
 
-const RoleBasedRedirect = async () => {
+export const RoleBasedRedirect = async () => {
     try {
         const role = await roleCheck();        
         switch (role) {

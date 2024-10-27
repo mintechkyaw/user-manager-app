@@ -57,8 +57,8 @@
                 <div>
 
                     <span v-for="permission in role.permissions" :key="permission.id"
-                        class=" inline-block mt-1.5 bg-blue-100 text-blue-800 text-base font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{
-                            permission.name }}</span>
+                        class=" inline-block mt-1.5 bg-blue-100 text-blue-800 text-base font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                        {{ permission }}</span>
 
                 </div>
             </div>
@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-import {  onMounted, onUpdated } from 'vue';
+import { onMounted, onUpdated } from 'vue';
 import { useRoleStore } from '../../../store';
 import { storeToRefs } from 'pinia';
 import { RouterLink, RouterView } from 'vue-router';

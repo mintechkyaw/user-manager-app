@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { isAuthenticated, roleCheck } from '../utils/auth';
+import { isAuthenticated, roleCheck,RoleBasedRedirect } from '../utils/auth';
 import { useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
 const router = createRouter({
@@ -32,6 +32,15 @@ const router = createRouter({
                 {
                     path: 'posts', name: 'posts', component: () => import('../Pages/admin/posts/PostsView.vue'),
                     meta: { requiresNonNormalUser: true },
+                    beforeEnter: async (to, from) => {
+                        const store = useUserStore();
+                        await store.authUserInfo();
+                        const { authUser } = storeToRefs(store)
+                        if (authUser.value.permissions.includes('read-post')) {
+                            return true;
+                        }
+                        RoleBasedRedirect();
+                    },
                     children: [
                         {
                             path: 'create',
@@ -45,21 +54,25 @@ const router = createRouter({
                             },
                         },
                         {
-                            path: ':id/edit',
+                            path: ':id',
                             name: 'postedit',
                             component: () => import('../Pages/admin/posts/PostEdit.vue'),
                             props: true,
-                            beforeEnter: async (to, from) => {
-                                const store = useUserStore();
-                                const { authUser } = storeToRefs(store)
-                                return authUser.value.permissions.includes('update-post')
-                            },
                         }
                     ]
                 },
                 {
                     path: 'users', name: 'users', component: () => import('../Pages/admin/users/UsersView.vue'),
                     meta: { requiresNonNormalUser: true },
+                    beforeEnter: async (to, from) => {
+                        const store = useUserStore();
+                        await store.authUserInfo();
+                        const { authUser } = storeToRefs(store)
+                        if (authUser.value.permissions.includes('read-user')) {
+                            return true;
+                        }
+                        RoleBasedRedirect();
+                    },
                     children: [
                         {
                             path: 'create',
@@ -73,16 +86,10 @@ const router = createRouter({
                             },
                         },
                         {
-                            path: ':id/edit',
+                            path: ':id',
                             name: 'useredit',
                             component: () => import('../Pages/admin/users/UserEdit.vue'),
                             props: true,
-                            beforeEnter: async (to, from) => {
-                                const store = useUserStore();
-                                await store.authUserInfo();
-                                const { authUser } = storeToRefs(store)
-                                return authUser.value.permissions.includes('update-user')
-                            },
                         }
                     ]
                 },
