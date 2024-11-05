@@ -94,7 +94,7 @@ import { storeToRefs } from 'pinia';
 
 import { usePermissionStore } from '../../../store';
 import { onMounted } from 'vue';
-import { RouterLink } from 'vue-router';
+// import { RouterLink } from 'vue-router';
 const store = usePermissionStore();
 const { permissions, error, loading } = storeToRefs(store);
 onMounted(() => {

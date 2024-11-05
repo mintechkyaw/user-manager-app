@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { isAuthenticated, roleCheck,RoleBasedRedirect } from '../utils/auth';
+import { isAuthenticated, roleCheck, RoleBasedRedirect } from '../utils/auth';
 import { useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
 const router = createRouter({

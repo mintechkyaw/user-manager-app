@@ -29,7 +29,6 @@ export const login = async (form) => {
             console.error('An unknown error occurred');
         }
     }
-
 };
 
 // Logout Function

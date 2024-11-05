@@ -1,6 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { computed, onBeforeUpdate, onMounted, onUpdated, ref } from "vue";
+import { computed, ref } from "vue";
 import router from "../router";
 
 // this is user store

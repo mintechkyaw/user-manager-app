@@ -1,6 +1,6 @@
 <script setup>
 
-import { onMounted, onUpdated, ref, watch, } from 'vue';
+import { onMounted, onUpdated } from 'vue';
 import { useUserStore } from '../../../store';
 import { storeToRefs } from 'pinia';
 import { RouterView, RouterLink } from 'vue-router';
