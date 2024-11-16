@@ -1,6 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { computed, onBeforeUpdate, onMounted, onUpdated, ref } from "vue";
+import { computed, ref } from "vue";
 import router from "../router";
 
 // this is user store
@@ -15,7 +15,6 @@ export const useUserStore = defineStore('user', () => {
 
     const user = ref([])
     const users = ref([])
-
 
     const authUserInfo = async () => {
         try {
@@ -51,11 +50,11 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    const fetchUsers = async () => {
+    const fetchUsers = async ({page=1,itemsPerPage=10,search=''} = {}) => {
         loading.value = true
         try {
-            const response = await axios.get('api/users')
-            users.value = response.data.data
+            const response = await axios.get(`api/users/?page=${page}&per_page=${itemsPerPage}&search=${search}`)
+            users.value = response.data
         } catch (err) {
             error.value = err.response.data
         } finally {
@@ -97,9 +96,10 @@ export const useUserStore = defineStore('user', () => {
             try {
                 const response = await axios.delete('api/users/' + userId)
                 console.log(response.data.message);
-                fetchUsers();
             } catch (err) {
                 msg.value = err.response.data.msg
+            } finally {
+                fetchUsers();
             }
         }
     }
@@ -201,11 +201,11 @@ export const useRoleStore = defineStore('role', () => {
         }
     }
 
-    const fetchRoles = async () => {
+    const fetchRoles = async ({ page = 1, itemsPerPage = 10 } = {}) => {
         loading.value = true;
         try {
-            const response = await axios.get('/api/admin/roles')
-            roles.value = response.data.data
+            const response = await axios.get(`/api/admin/roles?page=${page}&per_page=${itemsPerPage}`)
+            roles.value = response.data
         } catch (err) {
             error.value = err.response.data;
             console.error(err.response.data.error);
@@ -251,7 +251,7 @@ export const useRoleStore = defineStore('role', () => {
                 msg.value = err.response.data.msg
                 console.error(err.response.data.msg);
             } finally {
-                fetchRoles();
+                fetchRoles()
             }
         }
 

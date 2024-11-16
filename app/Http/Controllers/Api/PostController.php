@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 
 class PostController extends Controller
 {
@@ -49,7 +50,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Post $post): JsonResponse|PostResource
     {
         if (auth()->user()->hasPermissionTo('read-post')) {
             return new PostResource($post);

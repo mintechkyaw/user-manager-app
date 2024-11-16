@@ -10,11 +10,17 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileUpdateController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Resources\UserResource;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', RegisterController::class)->middleware(['validation']);
-Route::post('/login', LoginController::class);
+
+
+Route::middleware(['validation'])->group(function () {
+    Route::post('/register', RegisterController::class);
+    Route::post('/login', LoginController::class);
+});
 
 Route::middleware(['auth:api', 'validation'])->group(function () {
 
@@ -40,3 +46,15 @@ Route::prefix('/admin')->middleware(['auth:api', 'role:admin', 'validation'])->g
     Route::put('/role-permission/{role}', [RolePermissionController::class, 'roleAddPermission']);
     Route::delete('/role-permission/{role}', [RolePermissionController::class, 'roleMinusPermission']);
 });
+
+// Route::get('/users', function (Request $request) {
+//     // sleep(2);
+//     if ($request->per_page == -1) {
+//         return response()->json(['data' => User::select('id', 'name', 'email', 'created_at')->get()]);
+//     }
+//     return User::select('id', 'name', 'email', 'created_at')
+//         ->when($request->search, function ($query) use ($request) {
+//             $query->whereAny(['name', 'email'], 'like', "%$request->search%");
+//         })
+//         ->paginate($request->per_page);
+// });

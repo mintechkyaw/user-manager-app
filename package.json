@@ -6,10 +6,11 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.13.0",
+        "@mdi/font": "^7.4.47",
         "@vitejs/plugin-vue": "^5.1.4",
         "autoprefixer": "^10.4.20",
-        "eslint": "^9.13.0",
-        "eslint-plugin-vue": "^9.29.1",
+        "eslint": "^9.14.0",
+        "eslint-plugin-vue": "^9.30.0",
         "flowbite": "^2.5.2",
         "globals": "^15.11.0",
         "postcss": "^8.4.47",
@@ -22,7 +23,8 @@
         "laravel-vite-plugin": "^1.0.5",
         "pinia": "^2.2.4",
         "vue": "^3.5.10",
-        "vue-router": "^4.4.5"
+        "vue-router": "^4.4.5",
+        "vuetify": "^3.7.3"
     },
     "type": "module"
 }

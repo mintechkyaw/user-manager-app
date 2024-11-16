@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia';
 import { logout } from '../utils/auth';
 import { onMounted, ref, watch } from 'vue';
 import { useForm } from 'laravel-precognition-vue';
+import Button from '../components/Button.vue';
 
 const edit = ref(false)
 const auth = useUserStore()
@@ -44,7 +45,7 @@ onMounted(async () => {
                     <h3 class="text-base font-semibold leading-7 text-gray-900">User Information</h3>
                     <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Personal details and application.</p>
                 </div>
-                <button type="submit" @click="edit = !edit" v-if="!edit"
+                <button @click="edit = !edit" v-if="!edit"
                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"><svg
                         class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -74,7 +75,7 @@ onMounted(async () => {
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <label class="text-sm font-medium leading-6 text-gray-900">Email address</label>
                             <input class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 border-0"
-                                :disabled="!edit" type="text" v-model="form.email" @change="form.validate('email')">
+                                :disabled="!edit" type="email" v-model="form.email" @change="form.validate('email')">
                             <p v-if="form.invalid('email')" class="mt-2 text-sm text-red-600 dark:text-red-500">
                                 {{ form.errors.email }}</p>
                         </div>
@@ -86,11 +87,9 @@ onMounted(async () => {
                     </div>
                 </dl>
                 <div class="mt-5 flex justify-end items-center space-x-2">
-                    <button type="submit" v-if="edit" :disabled="form.hasErrors" @click="updateProfile(form)"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update
-                        Information</button>
-                    <button type="submit" v-else @click="logout"
-                        class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Logout</button>
+                    <Button type="submit" v-if="edit" :disabled="form.hasErrors" @click="updateProfile(form)">Update
+                        Information</Button>
+                    <Button type="submit" class="bg-red" v-else @click="logout">Logout</Button>
                 </div>
             </div>
         </div>

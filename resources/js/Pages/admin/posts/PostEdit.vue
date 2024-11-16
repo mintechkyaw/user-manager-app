@@ -3,6 +3,7 @@ import { useForm } from 'laravel-precognition-vue';
 import { onMounted, ref, watch } from 'vue';
 import { usePostStore, useUserStore } from '../../../store';
 import { storeToRefs } from 'pinia';
+import Button from '../../../components/Button.vue';
 const store = usePostStore();
 const { post } = storeToRefs(store)
 const auth = useUserStore();
@@ -59,7 +60,7 @@ watch(post, (postData) => {
                                 placeholder="Type post title" required="">
                             <p v-if="form.invalid('title')" class="mt-2 text-sm text-red-600 dark:text-red-500">
                                 {{
-                                form.errors.title }}</p>
+                                    form.errors.title }}</p>
                         </div>
                         <div class="col-span-2">
                             <label for="content"
@@ -70,23 +71,20 @@ watch(post, (postData) => {
                                 placeholder="Write post content here...."></textarea>
                             <p v-if="form.invalid('content')" class="mt-2 text-sm text-red-600 dark:text-red-500">
                                 {{
-                                form.errors.content }}</p>
+                                    form.errors.content }}</p>
                         </div>
                     </div>
-                    <div v-if="auth.authPermissions?.includes('update-post')">
-                        <button v-if="edit" type="button" :disabled="form.hasErrors"
-                            @click="store.updatePost(post.id, form)"
-                            class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <div v-if="auth.authPermissions?.includes('update-post')" class="space-x-1">
+                        <Button v-if="edit" type="button" :disabled="form.hasErrors"
+                            @click="store.updatePost(post.id, form)">
                             Update Post
-                        </button>
-                        <button v-else type="button" @click="edit = !edit"
-                            class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        </Button>
+                        <Button v-else type="button" @click="edit = !edit">
                             Edit Post
-                        </button>
-                        <button v-show="edit" type="button" @click="edit = !edit"
-                            class="text-blue-700 inline-flex items-center bg-white border border-blue-700 hover:bg-blue-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm ms-2 px-3 py-2.5 text-center dark:bg-white dark:hover:bg-blue-50 dark:focus:ring-blue-800 transition-all duration-300 ease-in-out">
+                        </Button>
+                        <Button v-show="edit" type="button" @click="edit = !edit">
                             Cancel
-                        </button>
+                        </Button>
                     </div>
 
                 </form>

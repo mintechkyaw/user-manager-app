@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (UnauthorizedException $e, $request) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'error' => 'You don\'t have Permission to Access this. Contact your Boss!',
+                    'error' => 'You don\'t have Permission to Access this. Contact Support!',
                 ], 403);
             }
         });

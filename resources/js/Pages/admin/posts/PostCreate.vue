@@ -1,6 +1,7 @@
 <script setup>
 import { useForm } from 'laravel-precognition-vue';
 import { usePostStore } from '../../../store';
+import Button from '../../../components/Button.vue';
 const store = usePostStore();
 const form = useForm('post', 'api/posts', {
     title: '',
@@ -33,7 +34,9 @@ const form = useForm('post', 'api/posts', {
                 <form class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
-                            <label for="title"
+                            <v-text-field name="title" label="Title" id="title" v-model="form.title" clearable
+                                :rules="[form.errors.title]" @change="form.validate('title')" />
+                            <!-- <label for="title"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
                             <input type="text" name="title" id="title" v-model="form.title"
                                 @change="form.validate('title')"
@@ -41,9 +44,10 @@ const form = useForm('post', 'api/posts', {
                                 placeholder="Type post title" required="">
                             <p v-if="form.invalid('title')" class="mt-2 text-sm text-red-600 dark:text-red-500">
                                 {{
-                                    form.errors.title }}</p>
+                                form.errors.title }}</p> -->
                         </div>
                         <div class="col-span-2">
+                            vtext
                             <label for="content"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
                             <textarea id="content" rows="6" v-model="form.content" @change="form.validate('content')"
@@ -54,10 +58,9 @@ const form = useForm('post', 'api/posts', {
                                     form.errors.content }}</p>
                         </div>
                     </div>
-                    <button type="button" :disabled="form.hasErrors" @click="store.createPost(form)"
-                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <Button type="button" :disabled="form.hasErrors" @click="store.createPost(form)">
                         Upload Post
-                    </button>
+                    </Button>
                 </form>
             </div>
         </div>

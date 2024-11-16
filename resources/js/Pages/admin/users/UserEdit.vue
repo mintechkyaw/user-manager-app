@@ -22,7 +22,7 @@ const form = useForm('put', 'api/users/' + props.id, {
 
 onMounted(async () => {
     await userStore.fetchUser(props.id);
-    await roleStore.fetchRoles();
+    await roleStore.fetchRoles({ page: '', itemsPerPage: -1 });
 })
 
 watch(user, (userData) => {

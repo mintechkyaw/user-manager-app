@@ -63,25 +63,13 @@
                             {{ permission.name }}
                         </th>
                         <td class="px-6 py-4">
-                            <span v-for="role in permission.attached_role" :key="role.id"
-                                class="inline-block mt-1.5 bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-1 rounded-lg dark:bg-blue-900 dark:text-blue-300">
-                                {{ role }}</span>
+                            <v-chip color="primary m-0.5" v-for="role in permission.attached_role" :key="role.id">
+                                {{ role }}
+                            </v-chip>
                         </td>
                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ permission.created_at }}
                         </td>
-                        <!-- <td class="px-6 py-4 space-x-1.5">
-                            <RouterLink :to="{name:'permissions'}">
-                                <svg class="w-6 h-6 font-medium text-blue-600 dark:text-blue-500" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M10.779 17.779 4.36 19.918 6.5 13.5m4.279 4.279 8.364-8.643a3.027 3.027 0 0 0-2.14-5.165 3.03 3.03 0 0 0-2.14.886L6.5 13.5m4.279 4.279L6.499 13.5m2.14 2.14 6.213-6.504M12.75 7.04 17 11.28" />
-                                </svg>
-                            </RouterLink>
-                        </td> -->
-
                     </tr>
                 </tbody>
             </table>
@@ -94,7 +82,6 @@ import { storeToRefs } from 'pinia';
 
 import { usePermissionStore } from '../../../store';
 import { onMounted } from 'vue';
-import { RouterLink } from 'vue-router';
 const store = usePermissionStore();
 const { permissions, error, loading } = storeToRefs(store);
 onMounted(() => {

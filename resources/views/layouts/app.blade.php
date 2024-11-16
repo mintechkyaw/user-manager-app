@@ -8,7 +8,7 @@
     <title>User-Manager-App</title>
 </head>
 
-<body class="bg-white dark:bg-gray-900">
+<body >
     <div id="app"></div>
     @vite('resources/js/main.js')
 </body>

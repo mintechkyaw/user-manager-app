@@ -3,6 +3,7 @@ import { useForm } from 'laravel-precognition-vue';
 import { useRoleStore, usePermissionStore } from '../../../store';
 import { onMounted, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
+import Button from '../../../components/Button.vue';
 
 const permissionStore = usePermissionStore();
 const roleStore = useRoleStore();
@@ -70,7 +71,8 @@ watch(role, (roleData) => {
                                 <div v-for="permission in permissions" :key="permission.id" class="flex items-center">
                                     <input :id="permission.id" type="checkbox" :value="permission.name"
                                         v-model="form.permissions" :disabled="!edit"
-                                        :checked="form.permissions.some(p => p === permission.name)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                        :checked="form.permissions.some(p => p === permission.name)"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     <label :for="permission.id"
                                         class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                         {{ permission.name }}
@@ -82,19 +84,18 @@ watch(role, (roleData) => {
                             </p>
                         </div>
                     </div>
-                    <button v-if="edit" type="button" :disabled="form.hasErrors"
-                        @click="roleStore.updateRole(role.id, form)"
-                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Update Role
-                    </button>
-                    <button v-else type="button" @click="edit = !edit"
-                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Edit Role
-                    </button>
-                    <button v-show="edit" type="button" @click="edit = !edit"
-                        class="text-blue-700 inline-flex items-center bg-white border border-blue-700 hover:bg-blue-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm ms-2 px-3 py-2.5 text-center dark:bg-white dark:hover:bg-blue-50 dark:focus:ring-blue-800 transition-all duration-300 ease-in-out">
-                        Cancel
-                    </button>
+                    <div class="space-x-1">
+                        <Button v-if="edit" type="button" :disabled="form.hasErrors"
+                            @click="roleStore.updateRole(role.id, form)">
+                            Update Role
+                        </Button>
+                        <Button v-else type="button" @click="edit = !edit">
+                            Edit Role
+                        </Button>
+                        <Button v-show="edit" type="button" @click="edit = !edit">
+                            Cancel
+                        </Button>
+                    </div>
                 </form>
             </div>
         </div>

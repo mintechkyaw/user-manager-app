@@ -21,9 +21,9 @@
                 <p class="mt-2 text-sm text-red-600 dark:text-red-500"> {{ error }}</p>
             </div>
             <div class="mb-5 flex justify-between items-center">
-                <button type="submit" @click="login(form)"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
-                <RouterLink :to="{name:'register'}" class="text-gray-900 dark:text-white hover:underline">Create New Account</RouterLink>
+                <Button type="submit" @click="login(form)">Login</Button>
+                <RouterLink :to="{ name: 'register' }" class="text-gray-900 dark:text-white hover:underline">Create New
+                    Account</RouterLink>
             </div>
         </form>
     </GuestLayout>
@@ -34,6 +34,7 @@ import { ref } from 'vue';
 import GuestLayout from '../Layouts/GuestLayout.vue';
 import { login } from '../utils/auth';
 import { RouterLink } from 'vue-router';
+import Button from '../components/Button.vue';
 const error = ref(null);
 const form = {
     email: 'minthantk642@gmail.com',

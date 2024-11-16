@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,10 +15,14 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (auth()->user()->hasPermissionTo('read-user')) {
-            $users = User::simplePaginate(10)->except(Auth::id());
+            $users = $request->per_page == -1
+                ? User::where('id','!=', Auth::id())->get()
+                : User::where('id','!=', Auth::id())->when($request->search, function ($query) use ($request) {
+                    $query->whereAny(['name', 'email'], 'like', "%$request->search%");
+                })->paginate($request->per_page);
 
             return UserResource::collection($users);
         }

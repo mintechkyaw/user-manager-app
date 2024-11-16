@@ -13,7 +13,21 @@ onMounted(() => {
 
 <template>
     <AdminNavBar />
-    <aside id="logo-sidebar"
+    <v-navigation-drawer>
+        <v-tabs direction="vertical">
+            <v-tab prepend-icon="mdi-view-dashboard" :to="{ name: 'dashboard' }">Dashboard</v-tab>
+            <v-tab v-if="auth.authPermissions?.includes('read-post')"  prepend-icon="mdi-post" :to="{ name: 'posts' }">Posts</v-tab>
+            <v-tab v-if="auth.authPermissions?.includes('read-user')" prepend-icon="mdi-account-group" :to="{name:'users'}"> Users</v-tab>
+            <v-tab v-if="authUser.role === 'admin'" prepend-icon="mdi-account-lock" :to="{name: 'roles'}"> Roles</v-tab>
+            <v-tab v-if="authUser.role === 'admin'" prepend-icon="mdi-lock" :to="{name:'permissions'}"> Permissions</v-tab>
+        </v-tabs>
+    </v-navigation-drawer>
+    <v-main>
+        <v-container>
+            <slot></slot>
+        </v-container>
+    </v-main>
+    <!-- <aside id="logo-sidebar"
         class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
         aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
@@ -91,5 +105,5 @@ onMounted(() => {
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
             <slot></slot>
         </div>
-    </div>
+    </div> -->
 </template>

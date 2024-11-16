@@ -3,6 +3,7 @@ import { useForm } from 'laravel-precognition-vue';
 import { useRoleStore, usePermissionStore } from '../../../store';
 import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
+import Button from '../../../components/Button.vue';
 const permission = usePermissionStore();
 const store = useRoleStore();
 const { permissions } = storeToRefs(permission);
@@ -40,14 +41,8 @@ onMounted(() => {
                 <form class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
-                            <label for="name"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
-                            <input type="text" name="name" id="name" v-model="form.name" @change="form.validate('name')"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Type role name" required="">
-                            <p v-if="form.invalid('name')" class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                {{
-                                    form.errors.name }}</p>
+                            <v-text-field label="Role" clearable v-model="form.name" @change="form.validate('name')"
+                                :rules="[form.errors.name]" required />
                         </div>
                         <div class="col-span-2">
                             <label for="name"
@@ -55,8 +50,7 @@ onMounted(() => {
                             <div class="grid grid-cols-2 gap-4">
                                 <div v-for="permission in permissions" :key="permission.id" class="flex items-center">
                                     <input :id="permission.id" type="checkbox" v-model="form.permissions"
-                                        :value="permission.name"
-                                        @change="form.validate('permissions')"
+                                        :value="permission.name" @change="form.validate('permissions')"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     <label :for="permission.id"
                                         class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -70,10 +64,9 @@ onMounted(() => {
                         </div>
 
                     </div>
-                    <button type="button" :disabled="form.hasErrors" @click="store.createRole(form)"
-                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                       Create Role
-                    </button>
+                    <Button type="button" :disabled="form.hasErrors" @click="store.createRole(form)">
+                        Create Role
+                    </Button>
                 </form>
             </div>
         </div>
